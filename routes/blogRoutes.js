@@ -2,9 +2,42 @@ const express = require('express');
 const Blog = require('../model/Blog.js');
 const Users = require("../model/Users.js");
 const auth = require("../middleware/authMiddleware");
+const nodemailer =  require('nodemailer');
 
 const router = express.Router();
 
+// ================= Functions =================== 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'abdulquadir8701@gmail.com',
+    pass: 'wzqt scni nugk qmub', // Your app-specific password
+  },
+});
+
+
+// Define the email endpoint
+router.post('/send-email', (req, res) => {
+  const { name, email, message } = req.body;
+  console.log(name, email, message)
+  console.log('mail api is called.')
+  const mailOptions = {
+    from: 'abdulquadir8701@gmail.com',
+    to: email,
+    subject: `Message from ${name}`,
+    text: message,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('error in sending mail')
+      return res.status(500).json({ error: error.message });
+    }
+    res.status(200).json({ message: 'Email sent successfully!' });
+  });
+});
+
+// ------------------------------
 // Create a new blog post
 router.post('/', auth, async (req, res) => {
   try {
