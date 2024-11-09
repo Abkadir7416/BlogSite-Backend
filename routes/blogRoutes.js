@@ -18,13 +18,11 @@ const transporter = nodemailer.createTransport({
 
 // Define the email endpoint
 router.post('/send-email', (req, res) => {
-  const { name, email, message } = req.body;
-  console.log(name, email, message)
-  console.log('mail api is called.')
+  const { subject, email, message } = req.body;
   const mailOptions = {
     from: 'abdulquadir8701@gmail.com',
     to: email,
-    subject: `Message from ${name}`,
+    subject: subject,
     text: message,
   };
 
