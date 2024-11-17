@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const blogRoutes = require('./routes/blogRoutes');
 const authRoutes = require("./routes/authRoutes");
+const authorRoutes = require("./controller/authorController")
 // Initialize Express
 const app = express();
 
@@ -23,6 +24,8 @@ mongoose
 // Routes
 app.use("/api/auth", authRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/authors', authorRoutes);
+
 
 // Start the server
 const PORT = process.env.PORT || 5000;

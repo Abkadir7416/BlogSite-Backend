@@ -3,39 +3,50 @@ const Blog = require('../model/Blog.js');
 const Users = require("../model/Users.js");
 const auth = require("../middleware/authMiddleware");
 const nodemailer =  require('nodemailer');
-
+require("dotenv").config();
 const router = express.Router();
 
-// ================= Functions =================== 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'abdulquadir8701@gmail.com',
-    pass: 'wzqt scni nugk qmub', // Your app-specific password
-  },
-});
+//sending and receiving email functionalliy
+router.post("/send-email", async (req, res) => {
+  const { name, email, message } = req.body;
+  const senderEmail = email;
 
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
 
-// Define the email endpoint
-router.post('/send-email', (req, res) => {
-  const { subject, email, message } = req.body;
-  const mailOptions = {
-    from: 'abdulquadir8701@gmail.com',
-    to: email,
-    subject: subject,
-    text: message,
+  // Email to Admin
+  const adminMailOptions = {
+    from: senderEmail,
+    to: process.env.ADMIN_EMAIL,
+    subject: "BlogSite: Contact Form Submission",
+    text: `Name: ${name}\nEmail: ${senderEmail}\nMessage: ${message}`,
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('error in sending mail')
-      return res.status(500).json({ error: error.message });
-    }
-    res.status(200).json({ message: 'Email sent successfully!' });
-  });
+  // Confirmation Email to User
+  const userMailOptions = {
+    from:"BlogSite:" + process.env.SMTP_USER,
+    to: senderEmail,
+    subject: "We’ve Received Your Message!",
+    text: `Hello ${name},\n\nThank you for reaching out! We've received your message:"\n\nWe will get back to you shortly.\n\nBest regards,\n[BlogSite]`,
+  };
+  try {
+    await transporter.sendMail(adminMailOptions); // Send email to admin
+    await transporter.sendMail(userMailOptions); // Send confirmation email to user
+
+    res.status(200).json({ message: "Your details have been received. Check your email for confirmation!" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to process your request", error });
+  }
+  
 });
 
-// ------------------------------
+
 // Create a new blog post
 router.post('/', auth, async (req, res) => {
   try {
