@@ -3,6 +3,7 @@ const Blog = require('../model/Blog.js');
 const Users = require("../model/Users.js");
 const auth = require("../middleware/authMiddleware");
 const nodemailer =  require('nodemailer');
+const Comment = require('../model/comment.js');
 require("dotenv").config();
 const router = express.Router();
 
@@ -201,32 +202,33 @@ router.put("/unlike/:id", auth, async (req, res) => {
   }
 });
 
-// ===========================
-
-
-router.post("/comments/:id", async (req, res) => {
-  console.log('id: ', req.params.id);
+router.post("/comments/:postId", async (req, res) => {
   try {
     const { commentText } = req.body;
-    const blog = await Blog.findById(req.params.id);
-    console.log(commentText);
-    // console.log(blog);
+    const blog = await Blog.findById(req.params.postId);
     if (!blog) {
-      return res.status(404).json({ msg: "Blog not found" });
+      return res.status(404).json({ msg: "Blog post not found" });
     }
-    const newComment = {
-      commentText,
-      // commentBy: req.user.id, // Get the user ID from the JWT middleware
-    };
 
-    blog.comments.push(newComment); // Add the new comment to the array
+    // Create a new comment
+    const newComment = new Comment({
+      postId: req.params.postId,
+      commentText,
+      // commentBy: req.user.id,
+    });
+
+    // Save the comment
+    await newComment.save();
+
+    // Optionally link the comment to the blog post
+    blog.comments.push(newComment._id);
+    blog.commentCount++;
     await blog.save();
 
-    res.status(200).json(blog.comments);
+    res.status(200).json(newComment);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
   }
 });
-
 module.exports = router;

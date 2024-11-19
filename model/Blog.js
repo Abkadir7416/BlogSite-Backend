@@ -27,17 +27,16 @@ const blogSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
-  // comments: {
-  //   type: [String], // Array of strings
-  //   default: [], // Default to an empty array
-  // },
-
+  commentCount: {
+    type: String, // Array of strings
+    default: 0, // Default to an empty array
+  },
   comments: [
-    {
-      commentText: { type: String, required: true }, // The comment text
-      // commentBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Reference to user who made the comment
-    },
-  ],
+    { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "Comment" 
+    }
+  ], // References comments
   saved: {
     type: Boolean,
     default: false,
