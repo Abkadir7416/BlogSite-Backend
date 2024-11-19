@@ -201,5 +201,32 @@ router.put("/unlike/:id", auth, async (req, res) => {
   }
 });
 
+// ===========================
+
+
+router.post("/comments/:id", async (req, res) => {
+  console.log('id: ', req.params.id);
+  try {
+    const { commentText } = req.body;
+    const blog = await Blog.findById(req.params.id);
+    console.log(commentText);
+    // console.log(blog);
+    if (!blog) {
+      return res.status(404).json({ msg: "Blog not found" });
+    }
+    const newComment = {
+      commentText,
+      // commentBy: req.user.id, // Get the user ID from the JWT middleware
+    };
+
+    blog.comments.push(newComment); // Add the new comment to the array
+    await blog.save();
+
+    res.status(200).json(blog.comments);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
 
 module.exports = router;
