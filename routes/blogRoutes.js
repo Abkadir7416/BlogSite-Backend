@@ -231,4 +231,18 @@ router.post("/comments/:postId", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+
+router.get("/comments/:postId", async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const comments = await Comment.find({ postId }); // Sort by newest first
+    // console.log("backend comments: ", comments);
+    if (!comments) {
+      return res.status(404).json({ message: 'No comment found' });
+    }
+    res.status(200).json(comments);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching blog comments', error });
+  }
+});
 module.exports = router;

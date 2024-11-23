@@ -4,8 +4,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const blogRoutes = require('./routes/blogRoutes');
 const authRoutes = require("./routes/authRoutes");
-const authorRoutes = require("./controller/authorController")
-// Initialize Express
+const writerRoutes = require('./routes/writeRoutes')
+
 const app = express();
 
 // Middleware
@@ -24,7 +24,7 @@ mongoose
 // Routes
 app.use("/api/auth", authRoutes);
 app.use('/api/blogs', blogRoutes);
-app.use('/api/authors', authorRoutes);
+app.use('/api/writer', writerRoutes);
 
 
 // Start the server
