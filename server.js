@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const blogRoutes = require('./routes/blogRoutes');
 const authRoutes = require("./routes/authRoutes");
-const writerRoutes = require('./routes/writeRoutes')
+const writerRoutes = require('./routes/writerRoutes')
 
 const app = express();
 
