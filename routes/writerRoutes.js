@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   try {
     const { name, degree, description, postCount, imgSrc } = req.body;
-
+    
     // Check if a writer with the same name already exists
     const existingWriter = await writer.findOne({ name });
     if (existingWriter) {
@@ -16,7 +16,9 @@ router.post("/", async (req, res) => {
         message: "Writer with this name already exists",
       });
     }
-
+    
+   
+      
     // Create a new writer
     const newWriter = new writer({
       name,
@@ -25,6 +27,12 @@ router.post("/", async (req, res) => {
       postCount,
       imgSrc,
     });
+
+    const blogs = await Blog.find({ writer:name });
+    if (blogs.length > 0) {
+      newWriter.postCount = blogs.length;
+      }
+
 
     await newWriter.save();
     res.status(201).json({

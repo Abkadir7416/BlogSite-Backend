@@ -60,14 +60,10 @@ router.post("/", auth, async (req, res) => {
     await newBlog.save();
     // Find the writer by name and update their postCount
     const writerDoc = await Writer.findOne({ name: writer });
-    if (!writerDoc) {
-      return res.status(404).json({
-        success: false,
-        message: "Writer not found",
-      });
+    if (writerDoc) {
+      writerDoc.postCount += 1; // Increment postCount by 1
+      await writerDoc.save(); // Save the updated writer document
     }
-    writerDoc.postCount += 1; // Increment postCount by 1
-    await writerDoc.save(); // Save the updated writer document
 
     res.status(201).json({
       success: true,
