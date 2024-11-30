@@ -15,10 +15,10 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Connect to MongoDB
-console.log('url: ', process.env.MONGO_URL);
+const mongourl = process.env.MONGO_URL;
+console.log('url: ', mongourl);
 mongoose
-  .connect(process.env.MONGO_URL, {
+  .connect(mongourl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -29,8 +29,8 @@ mongoose
 app.get('/', (req, res)=>{
   res.send("Welcome to BlogSite")
 })
-app.use("/api/auth", authRoutes);
-app.use('/api/blogs', blogRoutes);
+// app.use("/api/auth", authRoutes);
+// app.use('/api/blogs', blogRoutes);
 app.use('/api/writer', writerRoutes);
 
 
