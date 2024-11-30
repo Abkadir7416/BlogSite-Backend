@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const blogRoutes = require('./routes/blogRoutes');
 const authRoutes = require("./routes/authRoutes");
 const writerRoutes = require('./routes/writerRoutes')
+const dotenv = require('dotenv')
+
+dotenv.config();
 
 const app = express();
 
@@ -13,6 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Connect to MongoDB
+console.log('url: ', process.env.MONGO_URL);
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
@@ -22,6 +26,9 @@ mongoose
   .catch((err) => console.log(err));
 
 // Routes
+app.get('/', (req, res)=>{
+  res.send("Welcome to BlogSite")
+})
 app.use("/api/auth", authRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/writer', writerRoutes);
