@@ -3,7 +3,7 @@ const Blog = require("../model/Blog.js");
 const Users = require("../model/Users.js");
 const auth = require("../middleware/authMiddleware");
 const nodemailer = require("nodemailer");
-const Comment = require("../model/comment.js");
+// const Comment = require("../model/comment.js");
 const Writer = require("../model/writer.js");
 require("dotenv").config();
 const router = express.Router();
@@ -234,45 +234,45 @@ router.put("/unlike/:id", auth, async (req, res) => {
   }
 });
 
-router.post("/comments/:postId", async (req, res) => {
-  try {
-    const { commentText } = req.body;
-    const blog = await Blog.findById(req.params.postId);
-    if (!blog) {
-      return res.status(404).json({ msg: "Blog post not found" });
-    }
+// router.post("/comments/:postId", async (req, res) => {
+//   try {
+//     const { commentText } = req.body;
+//     const blog = await Blog.findById(req.params.postId);
+//     if (!blog) {
+//       return res.status(404).json({ msg: "Blog post not found" });
+//     }
 
-    // Create a new comment
-    const newComment = new Comment({
-      postId: req.params.postId,
-      commentText,
-    });
+//     // Create a new comment
+//     const newComment = new Comment({
+//       postId: req.params.postId,
+//       commentText,
+//     });
 
-    // Save the comment
-    await newComment.save();
+//     // Save the comment
+//     await newComment.save();
 
-    // Optionally link the comment to the blog post
-    blog.comments.push(newComment._id);
-    blog.commentCount++;
-    await blog.save();
+//     // Optionally link the comment to the blog post
+//     blog.comments.push(newComment._id);
+//     blog.commentCount++;
+//     await blog.save();
 
-    res.status(200).json(newComment);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-});
+//     res.status(200).json(newComment);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).send("Server error");
+//   }
+// });
 
-router.get("/comments/:postId", async (req, res) => {
-  try {
-    const postId = req.params.postId;
-    const comments = await Comment.find({ postId }); // Sort by newest first
-    if (!comments) {
-      return res.status(404).json({ message: "No comment found" });
-    }
-    res.status(200).json(comments);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching blog comments", error });
-  }
-});
+// router.get("/comments/:postId", async (req, res) => {
+//   try {
+//     const postId = req.params.postId;
+//     const comments = await Comment.find({ postId }); // Sort by newest first
+//     if (!comments) {
+//       return res.status(404).json({ message: "No comment found" });
+//     }
+//     res.status(200).json(comments);
+//   } catch (error) {
+//     res.status(500).json({ message: "Error fetching blog comments", error });
+//   }
+// });
 module.exports = router;
