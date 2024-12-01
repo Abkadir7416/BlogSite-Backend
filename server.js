@@ -30,7 +30,7 @@ app.get('/', (req, res)=>{
   res.send("Welcome to BlogSite")
 })
 app.use("/api/auth", authRoutes);
-// app.use('/api/blogs', blogRoutes);
+app.use('/api/blogs', blogRoutes);
 app.use('/api/writer', writerRoutes);
 
 
