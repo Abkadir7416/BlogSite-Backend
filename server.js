@@ -4,6 +4,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const blogRoutes = require('./routes/blogRoutes');
 const authRoutes = require("./routes/authRoutes");
+const cartRoutes = require("./routes/shop/cart");
+const bookRoutes = require("./routes/shop/Book");
+const studyToolRoutes = require("./routes/shop/studyTool");
 const writerRoutes = require('./routes/writerRoutes')
 const dotenv = require('dotenv')
 
@@ -32,6 +35,10 @@ app.get('/', (req, res)=>{
 app.use("/api/auth", authRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/writer', writerRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/shop', bookRoutes);
+app.use('/api/shop', studyToolRoutes);
+
 
 
 // Start the server
