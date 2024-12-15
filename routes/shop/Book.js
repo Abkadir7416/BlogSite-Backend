@@ -21,7 +21,7 @@ router.put("/book/:id", async (req, res) => {
   });
 });
 
-router.get("/books", async(req, res) => {
+router.get("/book", async(req, res) => {
     try {
         const books = await Book.find().sort({ createdAt: -1 }); // Sort by createdAt in descending order
         const booksCount = books.length;
