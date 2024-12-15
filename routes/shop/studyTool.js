@@ -30,7 +30,7 @@ router.put("/study-tool/:id", async (req, res) => {
   }
 });
 
-router.get("/study-tools", async (req, res) => {
+router.get("/study-tool", async (req, res) => {
   try {
     const studyTool = await StudyTool.find().sort({ createdAt: -1 }); // Sort by createdAt in descending order
     const studyToolCount = studyTool.length;
@@ -42,7 +42,7 @@ router.get("/study-tools", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error in fetching study-Tool", error });
   }
-});
+}); 
 
 router.get("/study-tool/:id", async (req, res) => {
   try {
