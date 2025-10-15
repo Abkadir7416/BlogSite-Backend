@@ -165,6 +165,12 @@ router.get("/", auth, async (req, res) => {
   try {
     const userid = req.user.id;
     const cart = await Cart.findOne({ userId: userid });
+    if(!cart) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+      });
+    }
     const updatedItems = await Promise.all(
       cart.items.map(async (item) => {
         const book = await Book.findById(item.productId);
